@@ -3,7 +3,8 @@
     "allow": [
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(sqlite3:*)"
     ]
   }
 }
