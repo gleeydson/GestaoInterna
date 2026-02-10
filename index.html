@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Controle de EPIs</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="mb-4">
+            <h1 class="sidebar-logo d-flex align-items-center">
+                <i class="bi bi-shield-check"></i>
+                EPI Control
+            </h1>
+            <p class="sidebar-subtitle">Sistema de Gestão</p>
+        </div>
+
+        <nav>
+            <a href="#" onclick="showSection('dashboard')" class="nav-item active" id="nav-dashboard">
+                <i class="bi bi-house-door"></i>
+                Dashboard
+            </a>
+            <a href="#" onclick="showSection('colaboradores')" class="nav-item" id="nav-colaboradores">
+                <i class="bi bi-people"></i>
+                Colaboradores
+            </a>
+            <a href="#" onclick="showSection('epis')" class="nav-item" id="nav-epis">
+                <i class="bi bi-box-seam"></i>
+                EPIs
+            </a>
+            <a href="#" onclick="showSection('entregas')" class="nav-item" id="nav-entregas">
+                <i class="bi bi-clipboard-check"></i>
+                Entregas
+            </a>
+            <a href="#" onclick="showSection('treinamentos-exames')" class="nav-item" id="nav-treinamentos-exames">
+                <i class="bi bi-book"></i>
+                Treinamentos/Exames
+            </a>
+            <a href="#" onclick="showSection('relatorios')" class="nav-item" id="nav-relatorios">
+                <i class="bi bi-bar-chart"></i>
+                Relatórios
+            </a>
+        </nav>
+
+        <div class="sidebar-support">
+            <p class="fw-semibold mb-1">Suporte Técnico</p>
+            <p class="text-muted">suporte@epicontrol.com</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="section">
+            <div class="mb-4">
+                <h2 class="fw-bold">Dashboard</h2>
+                <p class="text-muted">Visão geral do sistema de EPIs</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-12 col-md-6 col-lg-4 col-xl-2">
+                    <div class="stat-card fade-in">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted small fw-semibold mb-2">Colaboradores</p>
+                                <p class="h2 fw-bold mb-0" id="total-colaboradores">0</p>
+                            </div>
+                            <div class="stat-icon blue">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4 col-xl-2">
+                    <div class="stat-card fade-in" style="animation-delay: 0.1s">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted small fw-semibold mb-2">EPIs Cadastrados</p>
+                                <p class="h2 fw-bold mb-0" id="total-epis">0</p>
+                            </div>
+                            <div class="stat-icon green">
+                                <i class="bi bi-box-seam-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4 col-xl-2">
+                    <div class="stat-card fade-in" style="animation-delay: 0.2s">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted small fw-semibold mb-2">EPIs a Vencer</p>
+                                <p class="h2 fw-bold mb-0 text-warning" id="epis-vencer">0</p>
+                            </div>
+                            <div class="stat-icon orange">
+                                <i class="bi bi-clock-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4 col-xl-2">
+                    <div class="stat-card fade-in" style="animation-delay: 0.3s">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted small fw-semibold mb-2">Entregas no Mês</p>
+                                <p class="h2 fw-bold mb-0" id="entregas-mes">0</p>
+                            </div>
+                            <div class="stat-icon purple">
+                                <i class="bi bi-clipboard-check-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4 col-xl-2">
+                    <div class="stat-card fade-in" style="animation-delay: 0.4s">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted small fw-semibold mb-2">Treinamentos Pendentes</p>
+                                <p class="h2 fw-bold mb-0 text-danger" id="treinamentos-vencer">0</p>
+                            </div>
+                            <div class="stat-icon red">
+                                <i class="bi bi-book-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4 col-xl-2">
+                    <div class="stat-card fade-in" style="animation-delay: 0.5s">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted small fw-semibold mb-2">Exames Pendentes</p>
+                                <p class="h2 fw-bold mb-0 text-danger" id="exames-vencer">0</p>
+                            </div>
+                            <div class="stat-icon pink">
+                                <i class="bi bi-file-medical-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Alerts -->
+            <div class="row g-4 mb-4">
+                <!-- EPIs Vencendo -->
+                <div class="col-12 col-lg-8">
+                    <div class="custom-card p-4">
+                        <h3 class="h5 fw-bold mb-4">⚠️ EPIs Próximos do Vencimento</h3>
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table table-hover">
+                                <thead class="table-light sticky-top">
+                                    <tr>
+                                        <th class="small fw-semibold text-uppercase">Colaborador</th>
+                                        <th class="small fw-semibold text-uppercase">EPI</th>
+                                        <th class="small fw-semibold text-uppercase">CA</th>
+                                        <th class="small fw-semibold text-uppercase">Vencimento</th>
+                                        <th class="small fw-semibold text-uppercase">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="epis-vencimento-body">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-5">Nenhum EPI próximo do vencimento</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="col-12 col-lg-4">
+                    <div class="custom-card p-4">
+                        <h3 class="h5 fw-bold mb-4">🚀 Ações Rápidas</h3>
+                        <div class="d-grid gap-3">
+                            <button onclick="showSection('colaboradores'); openModal('modalColaborador')" class="btn btn-gradient-primary py-3">
+                                + Novo Colaborador
+                            </button>
+                            <button onclick="showSection('epis'); openModal('modalEPI')" class="btn btn-gradient-success py-3">
+                                + Cadastrar EPI
+                            </button>
+                            <button onclick="showSection('entregas'); openModal('modalEntrega')" class="btn btn-gradient-purple py-3">
+                                + Registrar Entrega
+                            </button>
+                            <button onclick="showSection('relatorios')" class="btn btn-gradient-warning py-3">
+                                📊 Gerar Relatório
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas de Treinamentos e Exames -->
+            <div class="row g-4">
+                <!-- Treinamentos Pendentes -->
+                <div class="col-12 col-lg-6">
+                    <div class="custom-card p-4">
+                        <h3 class="h5 fw-bold mb-4">🎓 Treinamentos Pendentes</h3>
+                        <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                            <table class="table table-hover">
+                                <thead class="table-light sticky-top">
+                                    <tr>
+                                        <th class="small fw-semibold text-uppercase">Colaborador</th>
+                                        <th class="small fw-semibold text-uppercase">Função</th>
+                                        <th class="small fw-semibold text-uppercase">Cidade</th>
+                                        <th class="small fw-semibold text-uppercase">Próximo</th>
+                                        <th class="small fw-semibold text-uppercase">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="treinamentos-body">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-5">Nenhum treinamento pendente</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exames Periódicos Pendentes -->
+                <div class="col-12 col-lg-6">
+                    <div class="custom-card p-4">
+                        <h3 class="h5 fw-bold mb-4">🏥 Exames Periódicos Pendentes</h3>
+                        <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                            <table class="table table-hover">
+                                <thead class="table-light sticky-top">
+                                    <tr>
+                                        <th class="small fw-semibold text-uppercase">Colaborador</th>
+                                        <th class="small fw-semibold text-uppercase">Função</th>
+                                        <th class="small fw-semibold text-uppercase">Cidade</th>
+                                        <th class="small fw-semibold text-uppercase">Próximo</th>
+                                        <th class="small fw-semibold text-uppercase">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="exames-body">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-5">Nenhum exame pendente</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colaboradores Section -->
+        <div id="colaboradores-section" class="section d-none">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold">Colaboradores</h2>
+                    <p class="text-muted">Gerencie os colaboradores da empresa</p>
+                </div>
+                <button onclick="openModal('modalColaborador')" class="btn btn-gradient-primary">
+                    + Novo Colaborador
+                </button>
+            </div>
+
+            <div class="custom-card p-4">
+                <div class="mb-4">
+                    <input type="text" id="searchColaborador" placeholder="🔍 Buscar colaborador..." class="form-control">
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-gradient-primary">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Função</th>
+                                <th>Cidade</th>
+                                <th>EPIs Ativos</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="colaboradores-tbody">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-5">Nenhum colaborador cadastrado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- EPIs Section -->
+        <div id="epis-section" class="section d-none">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold">EPIs</h2>
+                    <p class="text-muted">Catálogo de Equipamentos de Proteção Individual</p>
+                </div>
+                <button onclick="openModal('modalEPI')" class="btn btn-gradient-success">
+                    + Cadastrar EPI
+                </button>
+            </div>
+
+            <div class="custom-card p-4">
+                <div class="mb-4">
+                    <input type="text" id="searchEPI" placeholder="🔍 Buscar EPI..." class="form-control">
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-gradient-success">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CA</th>
+                                <th>Tipo</th>
+                                <th>Validade CA</th>
+                                <th>Estoque</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="epis-tbody">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-5">Nenhum EPI cadastrado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Entregas Section -->
+        <div id="entregas-section" class="section d-none">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold">Registro de Entregas</h2>
+                    <p class="text-muted">Histórico completo de entregas de EPIs</p>
+                </div>
+                <button onclick="openModal('modalEntrega')" class="btn btn-gradient-purple">
+                    + Nova Entrega
+                </button>
+            </div>
+
+            <div class="custom-card p-4">
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-md-4">
+                        <input type="text" id="searchEntrega" placeholder="🔍 Buscar entrega..." class="form-control">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <input type="date" id="filterDataInicio" class="form-control">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <input type="date" id="filterDataFim" class="form-control">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-gradient-purple">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Colaborador</th>
+                                <th>EPI</th>
+                                <th>CA</th>
+                                <th>Validade</th>
+                                <th>Qtd</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entregas-tbody">
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-5">Nenhuma entrega registrada</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Treinamentos e Exames Section -->
+        <div id="treinamentos-exames-section" class="section d-none">
+            <div class="mb-4">
+                <h2 class="fw-bold">Treinamentos e Exames Periódicos</h2>
+                <p class="text-muted">Gerenciamento completo de capacitações e saúde ocupacional</p>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs-custom mb-4" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tab-treinamentos" data-bs-toggle="tab" data-bs-target="#content-treinamentos" type="button" role="tab">
+                        🎓 Treinamentos
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab-exames" data-bs-toggle="tab" data-bs-target="#content-exames" type="button" role="tab">
+                        🏥 Exames Periódicos
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Tab Treinamentos -->
+                <div class="tab-pane fade show active" id="content-treinamentos" role="tabpanel">
+                    <div class="custom-card p-4 mb-4">
+                        <h3 class="h5 fw-bold mb-4">📊 Visão Geral dos Treinamentos</h3>
+                        <div class="row g-3 mb-4">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="alert-box success">
+                                    <p class="small fw-semibold text-success mb-1">Em Dia</p>
+                                    <p class="h2 fw-bold text-success mb-0" id="treinamentos-em-dia">0</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="alert-box warning">
+                                    <p class="small fw-semibold text-warning mb-1">Próximos 30 dias</p>
+                                    <p class="h2 fw-bold text-warning mb-0" id="treinamentos-proximos">0</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="alert-box danger">
+                                    <p class="small fw-semibold text-danger mb-1">Vencidos</p>
+                                    <p class="h2 fw-bold text-danger mb-0" id="treinamentos-vencidos">0</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="alert-box" style="background-color: #f9fafb; border-color: #6b7280;">
+                                    <p class="small fw-semibold text-secondary mb-1">Sem Registro</p>
+                                    <p class="h2 fw-bold text-secondary mb-0" id="treinamentos-sem-registro">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <input type="text" id="searchTreinamento" placeholder="🔍 Buscar colaborador..." class="form-control">
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-gradient-danger">
+                                <thead>
+                                    <tr>
+                                        <th>Colaborador</th>
+                                        <th>Função</th>
+                                        <th>Cidade</th>
+                                        <th>Último Treinamento</th>
+                                        <th>Próximo Treinamento</th>
+                                        <th>Periodicidade</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="treinamentos-list-tbody">
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-5">Nenhum colaborador cadastrado</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Exames -->
+                <div class="tab-pane fade" id="content-exames" role="tabpanel">
+                    <div class="custom-card p-4 mb-4">
+                        <h3 class="h5 fw-bold mb-4">📊 Visão Geral dos Exames</h3>
+                        <div class="row g-3 mb-4">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="alert-box success">
+                                    <p class="small fw-semibold text-success mb-1">Em Dia</p>
+                                    <p class="h2 fw-bold text-success mb-0" id="exames-em-dia">0</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="alert-box warning">
+                                    <p class="small fw-semibold text-warning mb-1">Próximos 30 dias</p>
+                                    <p class="h2 fw-bold text-warning mb-0" id="exames-proximos">0</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="alert-box danger">
+                                    <p class="small fw-semibold text-danger mb-1">Vencidos</p>
+                                    <p class="h2 fw-bold text-danger mb-0" id="exames-vencidos">0</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="alert-box" style="background-color: #f9fafb; border-color: #6b7280;">
+                                    <p class="small fw-semibold text-secondary mb-1">Sem Registro</p>
+                                    <p class="h2 fw-bold text-secondary mb-0" id="exames-sem-registro">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <input type="text" id="searchExame" placeholder="🔍 Buscar colaborador..." class="form-control">
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-gradient-pink">
+                                <thead>
+                                    <tr>
+                                        <th>Colaborador</th>
+                                        <th>Função</th>
+                                        <th>Cidade</th>
+                                        <th>Último Exame</th>
+                                        <th>Próximo Exame</th>
+                                        <th>Periodicidade</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="exames-list-tbody">
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-5">Nenhum colaborador cadastrado</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relatórios Section -->
+        <div id="relatorios-section" class="section d-none">
+            <div class="mb-4">
+                <h2 class="fw-bold">Relatórios</h2>
+                <p class="text-muted">Análises e relatórios do sistema</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="custom-card p-4 report-card" onclick="gerarRelatorio('colaboradores')">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="report-icon bg-primary bg-opacity-10 text-primary me-3">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <h3 class="h6 fw-bold mb-0">Colaboradores</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Lista completa de colaboradores e EPIs associados</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="custom-card p-4 report-card" onclick="gerarRelatorio('epis')">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="report-icon bg-success bg-opacity-10 text-success me-3">
+                                <i class="bi bi-box-seam-fill"></i>
+                            </div>
+                            <h3 class="h6 fw-bold mb-0">Inventário EPIs</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Relatório de estoque e validade dos EPIs</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="custom-card p-4 report-card" onclick="gerarRelatorio('vencimentos')">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="report-icon bg-warning bg-opacity-10 text-warning me-3">
+                                <i class="bi bi-clock-fill"></i>
+                            </div>
+                            <h3 class="h6 fw-bold mb-0">Vencimentos EPIs</h3>
+                        </div>
+                        <p class="text-muted small mb-0">EPIs próximos do vencimento</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="custom-card p-4 report-card" onclick="gerarRelatorio('entregas')">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="report-icon bg-purple bg-opacity-10 text-purple me-3">
+                                <i class="bi bi-clipboard-check-fill"></i>
+                            </div>
+                            <h3 class="h6 fw-bold mb-0">Histórico Entregas</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Relatório detalhado de todas as entregas</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="custom-card p-4 report-card" onclick="gerarRelatorio('treinamentos')">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="report-icon bg-danger bg-opacity-10 text-danger me-3">
+                                <i class="bi bi-book-fill"></i>
+                            </div>
+                            <h3 class="h6 fw-bold mb-0">Treinamentos</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Status de treinamentos dos colaboradores</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="custom-card p-4 report-card" onclick="gerarRelatorio('exames')">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="report-icon bg-info bg-opacity-10 text-info me-3">
+                                <i class="bi bi-file-medical-fill"></i>
+                            </div>
+                            <h3 class="h6 fw-bold mb-0">Exames Periódicos</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Status de exames dos colaboradores</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="custom-card p-4 report-card" onclick="gerarRelatorio('por-setor')">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="report-icon bg-secondary bg-opacity-10 text-secondary me-3">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <h3 class="h6 fw-bold mb-0">Por Setor</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Distribuição de EPIs por setor</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="custom-card p-4 report-card" onclick="gerarRelatorio('custos')">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="report-icon" style="background-color: #fef3c7; color: #d97706;">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <h3 class="h6 fw-bold mb-0">Análise de Custos</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Custos com aquisição de EPIs</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="custom-card p-4 report-card" onclick="gerarRelatorio('conformidade')">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="report-icon" style="background-color: #ccfbf1; color: #0f766e;">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                            <h3 class="h6 fw-bold mb-0">Conformidade NR-6</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Relatório de conformidade com normas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Modal Colaborador -->
+    <div class="modal fade" id="modalColaborador" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Novo Colaborador</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formColaborador">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Nome Completo *</label>
+                                <input type="text" name="nome" required class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Função/Cargo *</label>
+                                <input type="text" name="funcao" required class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Cidade *</label>
+                                <select name="cidade" required class="form-select">
+                                    <option value="">Selecione...</option>
+                                    <option value="Dom Eliseu">Dom Eliseu</option>
+                                    <option value="Rondon">Rondon</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h6 class="fw-bold mb-3">🎓 Treinamentos e Exames</h6>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Data do Último Treinamento</label>
+                                <input type="date" name="dataUltimoTreinamento" class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Próximo Treinamento</label>
+                                <input type="date" name="proximoTreinamento" class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Data do Último Exame</label>
+                                <input type="date" name="dataUltimoExame" class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Próximo Exame</label>
+                                <input type="date" name="proximoExame" class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Periodicidade Treinamento (meses)</label>
+                                <select name="periodicidadeTreinamento" class="form-select">
+                                    <option value="">Selecione...</option>
+                                    <option value="3">3 meses</option>
+                                    <option value="6">6 meses</option>
+                                    <option value="12">12 meses</option>
+                                    <option value="24">24 meses</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Periodicidade Exame (meses)</label>
+                                <select name="periodicidadeExame" class="form-select">
+                                    <option value="">Selecione...</option>
+                                    <option value="6">6 meses</option>
+                                    <option value="12">12 meses</option>
+                                    <option value="24">24 meses</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-gradient-primary" onclick="salvarColaborador()">Salvar Colaborador</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal EPI -->
+    <div class="modal fade" id="modalEPI" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Cadastrar EPI</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEPI">
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Nome do EPI *</label>
+                                <input type="text" name="nome" required class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Certificado de Aprovação (CA) *</label>
+                                <input type="text" name="ca" required class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Tipo *</label>
+                                <select name="tipo" required class="form-select">
+                                    <option value="">Selecione...</option>
+                                    <option value="Proteção para Cabeça">Proteção para Cabeça</option>
+                                    <option value="Proteção para Olhos e Face">Proteção para Olhos e Face</option>
+                                    <option value="Proteção Auditiva">Proteção Auditiva</option>
+                                    <option value="Proteção Respiratória">Proteção Respiratória</option>
+                                    <option value="Proteção para Mãos">Proteção para Mãos</option>
+                                    <option value="Proteção para Pés">Proteção para Pés</option>
+                                    <option value="Proteção contra Quedas">Proteção contra Quedas</option>
+                                    <option value="Vestuário">Vestuário</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Validade do CA *</label>
+                                <input type="date" name="validadeCA" required class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Estoque Atual</label>
+                                <input type="number" name="estoque" min="0" class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Estoque Mínimo</label>
+                                <input type="number" name="estoqueMinimo" min="0" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Descrição</label>
+                                <textarea name="descricao" rows="3" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-gradient-success" onclick="salvarEPI()">Salvar EPI</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Entrega -->
+    <div class="modal fade" id="modalEntrega" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Registrar Entrega de EPI</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEntrega">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Colaborador *</label>
+                                <select name="colaboradorId" required class="form-select" id="selectColaboradorEntrega">
+                                    <option value="">Selecione o colaborador...</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">EPI *</label>
+                                <select name="epiId" required class="form-select" id="selectEPIEntrega">
+                                    <option value="">Selecione o EPI...</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Data da Entrega *</label>
+                                <input type="date" name="dataEntrega" required class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Data de Validade *</label>
+                                <input type="date" name="dataValidade" required class="form-control">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Quantidade *</label>
+                                <input type="number" name="quantidade" required min="1" value="1" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Observações</label>
+                                <textarea name="observacoes" rows="3" class="form-control"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="assinaturaDigital" id="assinaturaDigital">
+                                    <label class="form-check-label" for="assinaturaDigital">
+                                        Confirmo o recebimento do EPI e estou ciente das responsabilidades de uso
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-gradient-purple" onclick="salvarEntrega()">Registrar Entrega</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Atualizar Treinamento -->
+    <div class="modal fade" id="modalTreinamento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Atualizar Treinamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTreinamento">
+                        <input type="hidden" name="colaboradorId" id="treinamentoColaboradorId">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Data do Treinamento *</label>
+                            <input type="date" name="dataTreinamento" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Próximo Treinamento *</label>
+                            <input type="date" name="proximoTreinamento" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Observações</label>
+                            <textarea name="observacoes" rows="3" class="form-control"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-gradient-danger" onclick="salvarTreinamento()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Atualizar Exame -->
+    <div class="modal fade" id="modalExame" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Atualizar Exame Periódico</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formExame">
+                        <input type="hidden" name="colaboradorId" id="exameColaboradorId">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Data do Exame *</label>
+                            <input type="date" name="dataExame" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Próximo Exame *</label>
+                            <input type="date" name="proximoExame" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Resultado</label>
+                            <select name="resultado" class="form-select">
+                                <option value="">Selecione...</option>
+                                <option value="Apto">Apto</option>
+                                <option value="Apto com Restrições">Apto com Restrições</option>
+                                <option value="Inapto Temporário">Inapto Temporário</option>
+                                <option value="Inapto">Inapto</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Observações</label>
+                            <textarea name="observacoes" rows="3" class="form-control"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-gradient-danger" onclick="salvarExame()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript Modules -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/navigation.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/colaboradores.js"></script>
+    <script src="assets/js/epis.js"></script>
+    <script src="assets/js/entregas.js"></script>
+    <script src="assets/js/treinamentos.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
